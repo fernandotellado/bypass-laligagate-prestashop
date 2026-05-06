@@ -3,7 +3,7 @@
 Todos los cambios reseñables del módulo se documentan aquí.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y la numeración respeta [SemVer](https://semver.org/lang/es/).
 
-## [1.0.1] – 2026-05-06
+## [1.0.0] – 2026-05-06
 
 ### Añadido
 - Versión inicial publicada en GitHub.
@@ -16,4 +16,4 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 - Plantillas de email en español e inglés.
 - Opción para borrar todos los datos al desinstalar.
 
-[1.0.1]: https://github.com/fernandotellado/bypass-laligagate-prestashop/releases/tag/v1.0.1
+[1.0.0]: https://github.com/fernandotellado/bypass-laligagate-prestashop/releases/tag/v1.0.0

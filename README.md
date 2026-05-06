@@ -1,7 +1,7 @@
 # Bypass LaLigaGate – Módulo PrestaShop
 
 [![PrestaShop](https://img.shields.io/badge/PrestaShop-1.7%20%7C%208.x-blue.svg)](https://www.prestashop.com/)
-[![Versión](https://img.shields.io/badge/versión-1.0.1-green.svg)](bypasslaligagate/bypasslaligagate.php)
+[![Versión](https://img.shields.io/badge/versión-1.0.0-green.svg)](bypasslaligagate/bypasslaligagate.php)
 [![Licencia](https://img.shields.io/badge/licencia-GPLv2%2B-orange.svg)](LICENSE)
 
 Módulo de PrestaShop que desactiva automáticamente el proxy de Cloudflare cuando hay bloqueos de IP por partidos de fútbol en España, y lo restaura en cuanto el bloqueo termina.

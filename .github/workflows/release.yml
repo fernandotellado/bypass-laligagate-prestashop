@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Verificar que la carpeta del módulo existe
         run: |
@@ -72,7 +72,7 @@ jobs:
           fi
 
       - name: Publicar release con el ZIP adjunto
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: bypasslaligagate.zip
           generate_release_notes: true

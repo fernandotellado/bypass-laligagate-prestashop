@@ -47,7 +47,7 @@ class BypassLaLigaGate extends Module
     {
         $this->name          = 'bypasslaligagate';
         $this->tab           = 'administration';
-        $this->version       = '1.0.1';
+        $this->version       = '1.0.0';
         $this->author        = 'Mantenimiento WordPress';
         $this->need_instance = 0;
         $this->bootstrap     = true;
