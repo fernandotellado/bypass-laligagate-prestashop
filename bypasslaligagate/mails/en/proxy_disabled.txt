@@ -1,0 +1,17 @@
+Hola,
+
+Se han detectado bloqueos activos de IPs por parte de La Liga y el proxy de Cloudflare se ha desactivado automáticamente en los registros DNS configurados.
+
+Tienda: {shop_name}
+URL: {shop_url}
+Estado: Proxy OFF (DNS Only)
+Motivo: Bloqueos activos detectados en hayahora.futbol
+
+Los registros DNS seleccionados han pasado de Proxied (CDN) a DNS Only para que la tienda siga siendo accesible durante los bloqueos.
+
+El proxy se reactivará automáticamente cuando los bloqueos terminen y pase el periodo de espera configurado.
+
+Puedes consultar el estado actual en: {admin_link}
+
+--
+Bypass LaLigaGate v{version}

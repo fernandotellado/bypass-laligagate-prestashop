@@ -1,0 +1,14 @@
+Hola,
+
+Este es el resumen {label} de Bypass LaLigaGate.
+
+Tienda: {shop_name}
+URL: {shop_url}
+Periodo: {period_from} a {period_to}
+
+{detail_text}
+
+Puedes consultar el estado actual en: {admin_link}
+
+--
+Bypass LaLigaGate v{version}

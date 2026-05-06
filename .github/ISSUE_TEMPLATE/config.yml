@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Versión WordPress del plugin
+    url: https://es.wordpress.org/plugins/bypass-laligagate/
+    about: Si usas WordPress en lugar de PrestaShop, aquí tienes el plugin equivalente.
+  - name: Información sobre LaLigaGate
+    url: https://hayahora.futbol/
+    about: Datos en tiempo real sobre los bloqueos de IPs durante los partidos.

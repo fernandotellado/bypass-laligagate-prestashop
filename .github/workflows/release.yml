@@ -1,0 +1,54 @@
+name: Crear release con ZIP del módulo
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Empaquetar y publicar release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Verificar que la carpeta del módulo existe
+        run: |
+          if [ ! -d "bypasslaligagate" ]; then
+            echo "No existe la carpeta bypasslaligagate/"
+            exit 1
+          fi
+
+      - name: Comprobar coherencia entre tag y versión del módulo
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          MOD_VERSION=$(grep -oP "this->version\s*=\s*'\K[0-9]+\.[0-9]+\.[0-9]+" bypasslaligagate/bypasslaligagate.php || true)
+          echo "Tag: $TAG"
+          echo "Versión declarada en el módulo: $MOD_VERSION"
+          if [ -n "$MOD_VERSION" ] && [ "$TAG" != "$MOD_VERSION" ]; then
+            echo "El tag ($TAG) no coincide con la versión del módulo ($MOD_VERSION)."
+            echo "Actualiza \$this->version en bypasslaligagate/bypasslaligagate.php antes de etiquetar."
+            exit 1
+          fi
+
+      - name: Crear ZIP del módulo
+        run: |
+          zip -r bypasslaligagate.zip bypasslaligagate \
+            -x "bypasslaligagate/.DS_Store" \
+            -x "bypasslaligagate/**/.DS_Store"
+          ls -lh bypasslaligagate.zip
+
+      - name: Publicar release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bypasslaligagate.zip
+          generate_release_notes: true
+          body: |
+            Descarga `bypasslaligagate.zip` y súbelo desde **Módulos → Gestor de módulos → Subir un módulo** en tu PrestaShop.
+
+            Consulta los cambios en [CHANGELOG.md](../blob/main/CHANGELOG.md).

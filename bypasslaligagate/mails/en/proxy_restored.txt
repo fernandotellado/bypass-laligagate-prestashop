@@ -1,0 +1,14 @@
+Hola,
+
+Ahora mismo no hay bloqueos de IPs por parte de La Liga. El proxy de Cloudflare se ha reactivado automáticamente.
+
+Tienda: {shop_name}
+URL: {shop_url}
+Estado: Proxy ON (CDN)
+
+Los registros DNS seleccionados vuelven a estar en modo Proxied (CDN). Funcionamiento normal.
+
+Puedes consultar el estado actual en: {admin_link}
+
+--
+Bypass LaLigaGate v{version}

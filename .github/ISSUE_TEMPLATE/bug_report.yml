@@ -1,0 +1,61 @@
+name: Reportar un fallo
+description: Avisa de un comportamiento incorrecto del módulo.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por dedicar un rato a reportar el problema. Cuanta más información incluyas, antes podremos reproducirlo.
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: Qué pasa y qué esperabas que pasara.
+      placeholder: Al pulsar "Probar conexión" el módulo devuelve un error 401 aunque las credenciales son correctas...
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      placeholder: |
+        1. Voy a Configurar
+        2. Pego el API Token
+        3. Pulso "Probar conexión"
+        4. Aparece este error...
+    validations:
+      required: true
+
+  - type: input
+    id: ps_version
+    attributes:
+      label: Versión de PrestaShop
+      placeholder: "8.2.1"
+    validations:
+      required: true
+
+  - type: input
+    id: php_version
+    attributes:
+      label: Versión de PHP
+      placeholder: "8.1"
+    validations:
+      required: true
+
+  - type: input
+    id: modulo_version
+    attributes:
+      label: Versión del módulo
+      placeholder: "1.0.1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs o capturas
+      description: Pega aquí cualquier mensaje de error, log de PrestaShop o captura.
+      render: shell
