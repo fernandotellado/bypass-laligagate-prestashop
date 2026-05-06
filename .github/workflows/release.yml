@@ -1,4 +1,4 @@
-name: Crear release con ZIP del módulo
+name: Empaquetar módulo y publicar release
 
 on:
   push:
@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    name: Empaquetar y publicar release
+  release:
+    name: Crear bypasslaligagate.zip y publicar release
     runs-on: ubuntu-latest
 
     steps:
@@ -20,35 +20,70 @@ jobs:
       - name: Verificar que la carpeta del módulo existe
         run: |
           if [ ! -d "bypasslaligagate" ]; then
-            echo "No existe la carpeta bypasslaligagate/"
+            echo "::error::No existe la carpeta bypasslaligagate/ en la raíz del repo."
             exit 1
           fi
 
-      - name: Comprobar coherencia entre tag y versión del módulo
+      - name: Comprobar que el tag coincide con la versión del módulo
         run: |
           TAG="${GITHUB_REF_NAME#v}"
           MOD_VERSION=$(grep -oP "this->version\s*=\s*'\K[0-9]+\.[0-9]+\.[0-9]+" bypasslaligagate/bypasslaligagate.php || true)
-          echo "Tag: $TAG"
-          echo "Versión declarada en el módulo: $MOD_VERSION"
-          if [ -n "$MOD_VERSION" ] && [ "$TAG" != "$MOD_VERSION" ]; then
-            echo "El tag ($TAG) no coincide con la versión del módulo ($MOD_VERSION)."
-            echo "Actualiza \$this->version en bypasslaligagate/bypasslaligagate.php antes de etiquetar."
+          echo "Tag:                 $GITHUB_REF_NAME (sin prefijo: $TAG)"
+          echo "Versión del módulo:  $MOD_VERSION"
+          if [ -z "$MOD_VERSION" ]; then
+            echo "::warning::No se ha podido leer \$this->version en bypasslaligagate.php; sigo adelante sin verificar coherencia."
+          elif [ "$TAG" != "$MOD_VERSION" ]; then
+            echo "::error::El tag ($TAG) no coincide con la versión del módulo ($MOD_VERSION). Actualiza \$this->version antes de etiquetar."
             exit 1
           fi
 
-      - name: Crear ZIP del módulo
+      - name: Generar bypasslaligagate.zip con git archive
         run: |
-          zip -r bypasslaligagate.zip bypasslaligagate \
-            -x "bypasslaligagate/.DS_Store" \
-            -x "bypasslaligagate/**/.DS_Store"
-          ls -lh bypasslaligagate.zip
+          # git archive solo empaqueta archivos versionados en git.
+          # Eso garantiza un ZIP limpio: nada de .DS_Store, .git, archivos
+          # ignorados, basura del runner, etc. — sin importar la rama o tag.
+          # Usamos HEAD (el commit del tag tras el checkout) en lugar del ref
+          # del tag para no depender de fetch-depth ni de refs locales.
+          git archive \
+            --format=zip \
+            --output=bypasslaligagate.zip \
+            HEAD \
+            bypasslaligagate
 
-      - name: Publicar release
+          echo "::group::Tamaño del ZIP"
+          ls -lh bypasslaligagate.zip
+          echo "::endgroup::"
+
+          echo "::group::Contenido del ZIP"
+          unzip -l bypasslaligagate.zip
+          echo "::endgroup::"
+
+      - name: Comprobar que el ZIP tiene la estructura esperada
+        run: |
+          # La carpeta dentro del ZIP debe llamarse exactamente "bypasslaligagate/"
+          # y debe contener bypasslaligagate.php en la raíz de esa carpeta.
+          if ! unzip -l bypasslaligagate.zip | grep -qE ' bypasslaligagate/bypasslaligagate\.php$'; then
+            echo "::error::El ZIP no contiene bypasslaligagate/bypasslaligagate.php en la raíz."
+            exit 1
+          fi
+          if unzip -l bypasslaligagate.zip | grep -qE 'bypasslaligagate-[^/]+/'; then
+            echo "::error::El ZIP contiene una carpeta con sufijo (p. ej. bypasslaligagate-main/). Debe ser bypasslaligagate/ a secas."
+            exit 1
+          fi
+
+      - name: Publicar release con el ZIP adjunto
         uses: softprops/action-gh-release@v2
         with:
           files: bypasslaligagate.zip
           generate_release_notes: true
+          fail_on_unmatched_files: true
           body: |
-            Descarga `bypasslaligagate.zip` y súbelo desde **Módulos → Gestor de módulos → Subir un módulo** en tu PrestaShop.
+            ## Instalación
 
-            Consulta los cambios en [CHANGELOG.md](../blob/main/CHANGELOG.md).
+            Descarga **`bypasslaligagate.zip`** desde la sección *Assets* de esta release y súbelo en tu PrestaShop:
+
+            **Módulos → Gestor de módulos → Subir un módulo**
+
+            > Ignora los `Source code (zip)` y `Source code (tar.gz)` que GitHub añade automáticamente: contienen el repo entero con sufijo de versión y no son instalables tal cual.
+
+            Cambios completos en [CHANGELOG.md](../blob/main/CHANGELOG.md).
