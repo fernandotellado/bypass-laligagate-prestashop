@@ -52,3 +52,4 @@ secrets.php
 
 # Claude Code (configuración local del agente, no debe subirse)
 .claude/
+CLAUDE.md
